@@ -3,17 +3,20 @@ from rest_framework.generics import ListCreateAPIView
 from .models import Song
 from .serializers import SongSerializer
 from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 
 class SongHomePage(ListCreateAPIView):
     queryset = Song.objects.all()
-    serializer_class =SongSerializer
+    serializer_class = SongSerializer
 
 
 
-class SongDetailPage(APIView):
+class SongDetailPage(GenericAPIView):
+    serializer_class = SongSerializer
     def get(self, request, format=None, **kwargs):
         id = kwargs.get("id")
         slug = kwargs.get("slug")
@@ -30,3 +33,13 @@ class SongDetailPage(APIView):
         serialized_song = SongSerializer(current_song)
         return Response(serialized_song.data, status=status.HTTP_200_OK)
 
+
+class MySongView(ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+
+    def get_queryset(self):
+        print(self.request.user)
+        queryset = Song.objects.filter(artist=self.request.user)
+        return queryset

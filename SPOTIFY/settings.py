@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'rest_framework.authtoken',
-    'music.apps.MusicConfig'
+    'music.apps.MusicConfig',
+    "drf_spectacular", # new
 ]
 
 
@@ -88,6 +89,26 @@ DATABASES = {
     'PORT': '5432'  
     } 
 } 
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+    "rest_framework.permissions.IsAuthenticated",],
+
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+    "rest_framework.authentication.SessionAuthentication",
+    "rest_framework.authentication.TokenAuthentication",
+    ],
+
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema", # new
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Blog API Project",
+    "DESCRIPTION": "A sample blog to learn about DRF",
+    "VERSION": "1.0.0",
+# OTHER SETTINGS
+}
 
 
 # Database

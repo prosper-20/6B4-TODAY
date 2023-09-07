@@ -5,4 +5,4 @@ from .models import Song
 class SongSerializer(serializers.ModelSerializer):
     class Meta:
         model = Song
-        fields = ["id", "name", "slug", "artist", "release_date"]
+        fields = ["id", "name", "slug", "cover_image", "artist", "release_date"]
