@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, ListAPIView
 from .models import Song
 from .serializers import SongSerializer
 from rest_framework.views import APIView
@@ -32,6 +32,17 @@ class SongDetailPage(GenericAPIView):
         
         serialized_song = SongSerializer(current_song)
         return Response(serialized_song.data, status=status.HTTP_200_OK)
+    
+
+
+class ArtistSongView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Song.objects.all()
+    serializer_class = SongSerializer
+
+    def get_queryset(self):
+        queryset = Song.objects.filter(artist=self.request.user)
+        return queryset
 
 
 class MySongView(ListCreateAPIView):
@@ -43,3 +54,6 @@ class MySongView(ListCreateAPIView):
         print(self.request.user)
         queryset = Song.objects.filter(artist=self.request.user)
         return queryset
+    
+
+
